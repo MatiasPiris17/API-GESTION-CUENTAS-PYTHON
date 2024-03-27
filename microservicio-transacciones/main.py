@@ -1,11 +1,9 @@
 from sanic import Sanic
-from sanic.response import text
+from src.controller import Transactions
 
-app = Sanic("transactions")
-
-@app.get("/")
-async def hello_world(request):
-    return text("Hello, transactions.")
+app = Sanic("Transactions")
+    
+app.add_route(Transactions.as_view(), "/transactions")
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8081, debug=True)
