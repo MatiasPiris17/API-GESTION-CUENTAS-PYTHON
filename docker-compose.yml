@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   mongo: mongo:4.4 # mongo:4.4 o mongo:latest
     image: 
     restart: always
@@ -13,3 +14,23 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
+
+  micro-cuentas:
+    build:
+      context: ./microservicio-cuentas
+    container_name: cuentas
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+
+  micro-transacciones:
+    build:
+      context: ./microservicio-transacciones
+    container_name: transacciones
+    restart: always
+    ports:
+      - "8001:8001"
+    depends_on:
+      - mongo
