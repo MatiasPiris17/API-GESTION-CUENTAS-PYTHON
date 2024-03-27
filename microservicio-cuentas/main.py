@@ -1,7 +1,7 @@
 from sanic import Sanic
 from src.controller import Accounts
 
-app = Sanic("accounts")
+app = Sanic("Accounts")
     
 app.add_route(Accounts.as_view(), "/accounts")
 

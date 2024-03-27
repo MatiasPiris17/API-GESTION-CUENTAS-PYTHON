@@ -1,0 +1,15 @@
+version '3.8'
+
+services:
+  mongo:
+    image: mongo:lastest
+    restart: always
+    container_name: mongodb-challenge
+    hostname: mongo-host
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
