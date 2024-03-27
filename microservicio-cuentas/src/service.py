@@ -1,16 +1,30 @@
 from .database import accounts
+from database import Accounts
 
 class AccountsService():
 
     async def getAccounts(self):
         data = accounts
         return data
-    
+        
     async def getAccount(self, data):
-        for account in accounts:
-            if account["email"] == data["email"] or account["dni"] == data["dni"] :
-                return account
-        return False
+        try:
+            # for account in accounts:
+            #     if account["email"] == data["email"] or account["dni"] == data["dni"] :
+            #         return account
+
+            email = data["email"]
+            dni = data["dni"]
+
+            account = await Accounts.find_one({ "email": email, "dni": dni })
+
+            if not account or len(account) == 0 : 
+                return False
+            return account
+
+        except Exception as e:
+            print(f"Error al obtener la cuenta: {e}")
+            raise Exception
     
     async def postAccount(self, data):
         accounts.append(data)

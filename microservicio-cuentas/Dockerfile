@@ -1,4 +1,4 @@
-FROM sanicframework/sanic:3.8-latest
+FROM python:3.9
 
 WORKDIR /app
 
