@@ -1,3 +1,2 @@
 sanic 
 setuptools
-sanic_motor

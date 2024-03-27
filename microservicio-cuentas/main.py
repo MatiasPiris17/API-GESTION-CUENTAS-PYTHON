@@ -1,13 +1,7 @@
-from sanic import Sanic
-from sanic_motor import BaseModel
+from sanic import Sanic, json
 from src.controller import Accounts
-from src.database import settings
 
 app = Sanic("Accounts")
-
-app.config.update(settings)
-
-BaseModel.init_app(app)
 
 app.add_route(Accounts.as_view(), "/accounts")
 
