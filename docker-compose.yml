@@ -1,8 +1,8 @@
-version '3.8'
+version: '3.8'
 
 services:
-  mongo:
-    image: mongo:lastest
+  mongo: mongo:4.4 # mongo:4.4 o mongo:latest
+    image: 
     restart: always
     container_name: mongodb-challenge
     hostname: mongo-host
