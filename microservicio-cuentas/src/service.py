@@ -1,52 +1,53 @@
-from .database import accounts # AccountsDb
-from .account import Account
+from .database import db_client, account_schema, accounts_schema # AccountsDb
 
 class AccountsService():
-        
-    async def getAccount(self, data): # Buscar una cuenta
+    async def getAccount(self, data):
+        dni = data.get("dni")
         try:
-            email = data.get("email")
-            dni = data.get("dni")
-            for account in accounts :
-                emailAccount = account.get("email")
-                dniAccount = account.get("dni")
-                if(emailAccount == email or dniAccount == dni) :
-                    return account
-            return False
+            search = db_client.accounts.find_one({"dni": dni})
+
+            if not search :
+                return False
+            account = account_schema(search)
+            return account
+            
         except Exception as e:
-            print(f"Error al obtener la cuenta: {e}")
-            raise Exception
+            return {"error": str(e)}
     
 
-    async def postAccount(self, data): # Crear una cuenta si no existe, "money" se setea en 0
-        email = data.get("email")
+    async def postAccount(self, data): 
         dni = data.get("dni")
-        for account in accounts :
-            emailAccount = account.get("email")
-            dniAccount = account.get("dni")
-            if emailAccount == email or dniAccount == dni :
+        try:
+            account_dup = db_client.accounts.find_one({"dni": dni})
+            if account_dup :
                 return False
-        data["money"] = 0
-        accounts.append(data)
-        return data
+            account_dic = dict(data)
+            id = db_client.accounts.insert_one(account_dic).inserted_id
+            new_account = account_schema(db_client.accounts.find_one({"_id": id}))
+            return new_account
+        except Exception as e:
+            return {"error": str(e)}
     
     
-    async def putAccount(self, data): # Modificar una cuenta, buscando por dni o email
-        email = data.get("email")
+    async def putAccount(self, data): 
         dni = data.get("dni")
-        for account in accounts: 
-            emailAccount = account.get("email")
-            dniAccount = account.get("dni")
-            if emailAccount == email or dniAccount == dni :
-                account.update(data)
-                return accounts
-        return False
+        try: 
+            updated_account = db_client.accounts.find_one_and_replace({"dni": dni}, data)
+            if not updated_account:
+                return False
+            account = account_schema(db_client.accounts.find_one({"dni": dni}))
+            return account
+        except Exception as e:
+            return {"error": str(e)}
     
-    
+
     async def deleteAccount(self, data): # Elimiar una cuenta
         dni = data.get("dni")
-        account_new =  [account for account in accounts if account.get("dni") != dni]
-        if len(accounts) > len(account_new):
-            return account_new
-        else:
-            return False
+        try:
+            account = db_client.accounts.find_one({"dni": dni})
+            if not account:
+                return False
+            db_client.accounts.delete_one({"dni": dni})
+            return {"success": "Cuenta eliminada correctamente"}
+        except Exception as e:
+            return {"error": str(e)}
