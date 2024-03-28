@@ -92,7 +92,7 @@ class Accounts(HTTPMethodView):
             methods = AccountsService()
             accounts = await methods.deleteAccount(body)
             if not accounts :
-                raise exceptions.NotFound(f"No se encontró la cuenta con dni: {body["dni"]}")
+                raise exceptions.NotFound(f"No se encontró la cuenta")
 
             return json({"message": accounts})
 
