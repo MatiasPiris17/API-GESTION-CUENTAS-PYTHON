@@ -1,3 +1,8 @@
 sanic 
 setuptools
 pika 
+pymongo
+beanie
+pydantic
+motor
+typing 

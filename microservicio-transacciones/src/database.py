@@ -8,7 +8,7 @@ transactions = [
             "dni": "43859605",
             "email": "matiaslinkedin17@gmail.com"
         },
-        "transferencia": 600
+        "trasferencia": 600
     }, 
     {         
         "remitente": {
@@ -19,7 +19,7 @@ transactions = [
             "dni": "12345678",
             "email": "mastv@gmail.com"
         },
-        "transferencia": 540
+        "trasferencia": 540
     },
     { 
         "remitente": {
@@ -30,7 +30,7 @@ transactions = [
             "dni": "43859605",
             "email": "matiaslinkedin17@gmail.com"
         },
-        "transferencia": 40
+        "trasferencia": 40
     },
     { 
         "remitente": {
@@ -41,6 +41,25 @@ transactions = [
             "dni": "43859605",
             "email": "matiaslinkedin17@gmail.com"
         },
-        "transferencia": 50
+        "trasferencia": 50
     }
 ]
+
+from pymongo import MongoClient
+
+# db_client = MongoClient("mongodb+srv://root:root@cluster0.w5vafrc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").local
+db_client = MongoClient("mongodb+srv://root:root@cluster0.w5vafrc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").challenge
+
+def transfer_schema(transaction): 
+    remitente = transaction["remitente"]
+    destinatario = transaction["destinatario"]
+    print(transaction)
+    return {
+            "id": str(transaction["_id"]),
+            "remitente": { "dni":  remitente.get("dni", ""), "email": remitente.get("email", "")},
+            "destinatario": { "dni":  destinatario.get("dni", ""), "email": destinatario.get("email", "")},
+            "transfer": transaction.get("transfer")
+    }
+
+def transfers_schema(accounts) -> list:
+    return [transfer_schema(account) for account in accounts]
