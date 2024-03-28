@@ -1,10 +1,10 @@
-FROM sanicframework/sanic:3.8-latest
+FROM python:3.9
 
 WORKDIR /app
 
 COPY . .
 
-RUN pip install -r requirements.txt
+RUN python -m pip install -r requirements.txt
 
 EXPOSE 8001
 
