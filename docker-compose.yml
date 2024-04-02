@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 
-  micro-cuentas:
+  cuentas:
     build:
       context: ./microservicio-cuentas
     container_name: cuentas
@@ -10,7 +10,7 @@ services:
     ports:
       - "8000:8000"
 
-  micro-transacciones:
+  transacciones:
     build:
       context: ./microservicio-transacciones
     container_name: transacciones
