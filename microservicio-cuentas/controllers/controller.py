@@ -1,7 +1,7 @@
 from sanic.response import json
 from sanic.views import HTTPMethodView
 from sanic import exceptions
-from .service import AccountsService
+from services.service import AccountsService
 
 class Accounts(HTTPMethodView):
 
@@ -9,15 +9,15 @@ class Accounts(HTTPMethodView):
         try:
             body = request.json
 
-            if not body or ("dni" not in body or "email" not in body):
-                raise exceptions.BadRequest("Faltan datos en el cuerpo de la solicitud.")
+            if not body or ("email" not in body):
+                raise exceptions.BadRequest("Missing data in request body.")
             
             methods = AccountsService()
             account = await methods.getAccount(body)
             if not account : 
-                raise exceptions.NotFound(f"Cuenta no encontrada")
+                raise exceptions.NotFound(f"Account not found")
             
-            return json({"Account": account})
+            return json({"success": account})
         
         except exceptions.BadRequest as e:
             return json({"error": str(e)}, status=400)
@@ -27,7 +27,7 @@ class Accounts(HTTPMethodView):
 
         except Exception as e:
             print(e)
-            return json({"error": "Error interno del servidor."}, status=500)
+            return json({"error": "Internal Server Error."}, status=500)
     
 
     async def post(self, request):
@@ -35,15 +35,15 @@ class Accounts(HTTPMethodView):
 
             body = request.json
 
-            if not body or ("dni" not in body or "email" not in body):
-                raise exceptions.BadRequest("Faltan datos en el cuerpo de la solicitud.")
+            if not body or ("dni" not in body or "email" not in body or "name" not in body):
+                raise exceptions.BadRequest("Missing data in request body.")
 
             methods = AccountsService()
             account = await methods.postAccount(body)
             if not account:
-                raise exceptions.NotFound(f"Ya existe una cuenta con esos datos")
+                raise exceptions.NotFound(f"Account already exists")
 
-            return json({"Account": account})
+            return json({"success": account})
         
         except exceptions.BadRequest as e:
             return json({"error": str(e)}, status=400)
@@ -53,23 +53,23 @@ class Accounts(HTTPMethodView):
 
         except Exception as e:
             print(e)
-            return json({"error": e}, status=500)
+            return json({"error": "Internal Server Error"}, status=500)
     
 
     async def put(self, request):
         try:
             body = request.json
 
-            if not body or ("dni" not in body or "email" not in body):
-                raise exceptions.BadRequest("Faltan datos en el cuerpo de la solicitud.")
+            if not body or ("email" not in body):
+                raise exceptions.BadRequest("Missing data in request body.")
 
             methods = AccountsService()
             accounts = await methods.putAccount(body)
 
             if not accounts:
-                raise exceptions.NotFound(f"No se encontró la cuenta ")
+                raise exceptions.NotFound(f"Account not found.")
 
-            return json({"message": accounts})
+            return json({"success": accounts})
         
         except exceptions.BadRequest as e:
             return json({"error": str(e)}, status=400)
@@ -79,22 +79,22 @@ class Accounts(HTTPMethodView):
 
         except Exception as e:
             print(e)
-            return json({"error": "Error interno del servidor."}, status=500)
+            return json({"error": "Internal Server Error."}, status=500)
     
     
     async def delete(self, request):
         try:
             body = request.json
 
-            if not body or ("dni" not in body or "email" not in body):
-                raise exceptions.BadRequest("Faltan datos en el cuerpo de la solicitud.")
+            if not body or ("email" not in body):
+                raise exceptions.BadRequest("Missing data in request body.")
 
             methods = AccountsService()
             accounts = await methods.deleteAccount(body)
             if not accounts :
-                raise exceptions.NotFound(f"No se encontró la cuenta")
+                raise exceptions.NotFound(f"Account not found.")
 
-            return json({"message": accounts})
+            return json({"success": "Successfully deleted account"})
 
         except exceptions.BadRequest as e:
             return json({"error": str(e)}, status=400)
@@ -104,4 +104,4 @@ class Accounts(HTTPMethodView):
 
         except Exception as e:
             print(e)
-            return json({"error": "Error interno del servidor."}, status=500)
+            return json({"error": "Internal Server Error."}, status=500)
