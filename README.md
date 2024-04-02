@@ -7,6 +7,17 @@
 Para levantar todo el proyecto, ejecuta el siguiente comando en la raíz del proyecto:
 - docker-compose up
 
+## Arquitectura microservicios
+
+- main.py: Archivo principal del servicio.
+- /controllers: Contiene el controlador principal para manejar las peticiones HTTP.
+    - controller.py: Manejador de peticiones HTTP.
+- /services: Aquí se encuentra la lógica del negocio y las llamadas a la base de datos.
+    - services.py: Módulo que contiene la lógica del negocio.
+- /models: Contiene los modelos de datos y la configuración de la base de datos.
+    - database.py: Archivo de conexión a la base de datos.
+    - entidad.py: Define la estructura del modelo.
+
 ## Microservicios de cuentas
 
 Este proyecto proporciona un servicio para la gestión de cuentas, con la capacidad de realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre cuentas de usuario.
@@ -50,7 +61,7 @@ La URL base para acceder a los endpoints es:
 
 - **POST**: Crear una nueva transaccion proporcionando un **sender**, **addressee** y **transfer_cant** en el cuerpo de la solicitud.
 
-#### Estructura del Body
+#### Cuerpo de la solicitud
 ```json
 { 
     "sender": "string", // email 
