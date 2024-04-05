@@ -22,6 +22,8 @@ class transferController(HTTPMethodView):
     
             methods = transferService()
             new_transfer = await methods.createTransfer(body) 
+            if not new_transfer:
+                raise exceptions.BadRequest("transfer not accepted.")
 
             return json({"success": new_transfer})
         
