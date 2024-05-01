@@ -27,7 +27,7 @@ class RabbitMQClient():
 
         if method_frame:
             self.channel.basic_ack(method_frame.delivery_tag)
-            print('Response received: ', body)
+            # print('Response received: ', body)
             # return method_frame, header_frame, body
             return body
         else:

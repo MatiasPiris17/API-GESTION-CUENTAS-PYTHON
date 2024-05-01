@@ -12,16 +12,16 @@ class transferService(RabbitMQClient):
             await self.createQueue('validation_queue')
             await self.send('validation_queue', data)
             validation_response = await self.consume('response_queue', 'response_queue')
-            print(validation_response)
+            print('Response received: ', validation_response)
             if not validation_response: 
                 return False
-            
-            transfer_dict = dict(data)
-            id = db_client.transfers.insert_one(transfer_dict).inserted_id
-            new_transfer = transfer_schema(db_client.transfers.find_one({"_id": id}))
+            await self.close()
+            # transfer_dict = dict(data)
+            # id = db_client.transfers.insert_one(transfer_dict).inserted_id
+            # new_transfer = transfer_schema(db_client.transfers.find_one({"_id": id}))
 
-            return new_transfer
-            # return {"test ": "test"}
+            # return new_transfer
+            return {"test ": "test"}
         
         except Exception as e:
             return {"error": str(e)}
